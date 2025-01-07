@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sampling and Lebesgue–Stieltjes Integration</title>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <h1>General Concept of Sampling Mean and Variance</h1>
+  <h2>Sampling Mean (𝑋̄)</h2>
+  <ul>
+    <li><strong>Definition:</strong> The arithmetic average of sample observations.</li>
+    <li><strong>Distribution:</strong> According to the Central Limit Theorem, for a sufficiently large sample size \( n \), the sampling distribution of the mean approaches a normal distribution with mean \( \mu \) and variance \( \frac{\sigma^2}{n} \).</li>
+  </ul>
+
+  <h2>Sampling Variance (𝑆²)</h2>
+  <ul>
+    <li><strong>Definition:</strong> Measures the dispersion of sample observations around the sample mean, calculated as 
+      \[
+      S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i - \bar{X})^2
+      \].
+    </li>
+    <li><strong>Distribution:</strong> When sampling from a normal distribution, the statistic 
+      \((n-1) \frac{S^2}{\sigma^2}\) follows a chi-square distribution with \( n-1 \) degrees of freedom.
+    </li>
+  </ul>
+
+  <h2>Main Features of Their Distributions</h2>
+  <ul>
+    <li><strong>Sample Mean:</strong>
+      <ul>
+        <li>Mean: \( \mu \)</li>
+        <li>Variance: \( \frac{\sigma^2}{n} \)</li>
+        <li>Shape: Approaches normality as \( n \) increases (Central Limit Theorem).</li>
+      </ul>
+    </li>
+    <li><strong>Sample Variance:</strong>
+      <ul>
+        <li>Mean: \( \sigma^2 \) (unbiased estimator)</li>
+        <li>Distribution: Scaled chi-square distribution for normal populations.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h1>Lebesgue–Stieltjes Integration</h1>
+  <h2>General Idea</h2>
+  <p>
+    The Lebesgue–Stieltjes integral integrates a function \( f \) with respect to a function \( g \) of bounded variation, generalizing integration to a broader class of functions and measures.
+  </p>
+
+  <h2>Applications in Probability Theory</h2>
+  <ul>
+    <li><strong>Expectation as an Integral:</strong> The expected value of a random variable \( X \) can be expressed as:
+      \[
+      \mathbb{E}[X] = \int_{-\infty}^{\infty} x \, dF(x)
+      \]
+      where \( F \) is the cumulative distribution function (CDF) of \( X \).
+    </li>
+    <li><strong>Integration by Parts:</strong> Useful for computing expectations involving products of random variables.</li>
+  </ul>
+
+  <h2>Applications in Measure Theory</h2>
+  <ul>
+    <li><strong>Measure Construction:</strong> Any function of bounded variation on the real line defines a Lebesgue–Stieltjes measure.</li>
+    <li><strong>Extension of Integration Theory:</strong> Extends the Lebesgue integral to more general measures, enhancing flexibility and applicability.</li>
+  </ul>
+</body>
+</html>
