@@ -15,90 +15,6 @@
 
   <main>
     <section>
-      <h2>General Concept of Sampling Mean and Variance</h2>
-
-      <h3>1. Sampling Mean (\( \bar{X} \))</h3>
-      <p>
-        The sampling mean is a measure of central tendency, calculated as the arithmetic average of a set of sample observations.
-      </p>
-      <p><strong>Formula:</strong></p>
-      <p>
-        \[
-        \bar{X} = \frac{1}{n} \sum_{i=1}^n X_i
-        \]
-      </p>
-      <h4>Distribution of the Sampling Mean:</h4>
-      <ul>
-        <li><strong>Mean:</strong> \( \mu \) (the population mean).</li>
-        <li><strong>Variance:</strong> \( \frac{\sigma^2}{n} \), where \( \sigma^2 \) is the population variance.</li>
-        <li><strong>Shape:</strong> Approaches a normal distribution as the sample size \( n \) increases, according to the Central Limit Theorem.</li>
-      </ul>
-
-      <h3>2. Sampling Variance (\( S^2 \))</h3>
-      <p>
-        The sampling variance measures the dispersion of sample observations around the sample mean. It provides an estimate of the population variance.
-      </p>
-      <p><strong>Formula:</strong></p>
-      <p>
-        \[
-        S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i - \bar{X})^2
-        \]
-      </p>
-      <h4>Distribution of the Sampling Variance:</h4>
-      <ul>
-        <li><strong>Mean:</strong> \( \sigma^2 \) (an unbiased estimator of the population variance).</li>
-        <li><strong>Distribution:</strong> For a normal population, the scaled statistic 
-          \((n-1) \frac{S^2}{\sigma^2}\) follows a chi-square distribution with \( n-1 \) degrees of freedom.
-        </li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>Main Features of Their Distributions</h2>
-      <h3>Sample Mean:</h3>
-      <ul>
-        <li><strong>Mean:</strong> \( \mu \)</li>
-        <li><strong>Variance:</strong> \( \frac{\sigma^2}{n} \)</li>
-        <li><strong>Shape:</strong> Approaches normality as \( n \) increases.</li>
-      </ul>
-
-      <h3>Sample Variance:</h3>
-      <ul>
-        <li><strong>Mean:</strong> \( \sigma^2 \)</li>
-        <li><strong>Distribution:</strong> Chi-square distribution with \( n-1 \) degrees of freedom (when the population is normal).</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>Lebesgue–Stieltjes Integration</h2>
-      <h3>General Idea</h3>
-      <p>
-        The Lebesgue–Stieltjes integral extends the concepts of the Riemann and Lebesgue integrals, enabling integration with respect to functions of bounded variation. This generalization provides a flexible framework for integration in probability and measure theory.
-      </p>
-
-      <h3>Applications in Probability Theory</h3>
-      <ul>
-        <li><strong>Expectation as an Integral:</strong> The expected value of a random variable \( X \) can be expressed using the Lebesgue–Stieltjes integral as:
-          \[
-          \mathbb{E}[X] = \int_{-\infty}^\infty x \, dF(x)
-          \]
-          where \( F(x) \) is the cumulative distribution function (CDF) of \( X \).
-        </li>
-        <li><strong>Integration by Parts:</strong> In probability, this property simplifies the computation of expectations for products of random variables:
-          \[
-          \int_a^b u \, dv = uv \big|_a^b - \int_a^b v \, du
-          \]
-        </li>
-      </ul>
-
-      <h3>Applications in Measure Theory</h3>
-      <ul>
-        <li><strong>Measure Construction:</strong> A function \( g \) of bounded variation defines a Lebesgue–Stieltjes measure \( \mu_g \). This is used to assign measures to intervals, facilitating integration with respect to \( g \).</li>
-        <li><strong>Extension of Integration Theory:</strong> The Lebesgue–Stieltjes integral extends the Lebesgue integral to allow integration with respect to more general measures, such as those induced by cumulative distribution functions.</li>
-      </ul>
-    </section>
-
-    <section>
       <h2>Compute Integrals</h2>
       <form id="integrationForm">
         <label for="a">Lower bound (a):</label>
@@ -109,6 +25,16 @@
 
         <label for="n">Number of intervals (n):</label>
         <input type="number" id="n" name="n" step="1" value="1000">
+
+        <label for="functionSelect">Function (f(x)):</label>
+        <select id="functionSelect">
+          <option value="normalDensity">e^(-x^2 / 2) / sqrt(2 * pi)</option>
+          <option value="abs">|x|</option>
+          <option value="square">x^2</option>
+          <option value="sin">sin(x)</option>
+          <option value="log">log(x)</option>
+          <option value="exp">e^x</option>
+        </select>
 
         <button type="button" onclick="computeIntegrals()">Compute</button>
       </form>
@@ -122,9 +48,50 @@
   </main>
 
   <script>
-    // Define the function to integrate (example: standard normal density)
+    // Define available functions
     function normalDensity(x) {
       return (1 / Math.sqrt(2 * Math.PI)) * Math.exp(-0.5 * x * x);
+    }
+
+    function abs(x) {
+      return Math.abs(x);
+    }
+
+    function square(x) {
+      return x * x;
+    }
+
+    function sin(x) {
+      return Math.sin(x);
+    }
+
+    function log(x) {
+      return x > 0 ? Math.log(x) : 0; // log(x) is undefined for x <= 0
+    }
+
+    function exp(x) {
+      return Math.exp(x);
+    }
+
+    // Get the selected function from the dropdown
+    function getSelectedFunction() {
+      const selectedFunction = document.getElementById('functionSelect').value;
+      switch (selectedFunction) {
+        case 'normalDensity':
+          return normalDensity;
+        case 'abs':
+          return abs;
+        case 'square':
+          return square;
+        case 'sin':
+          return sin;
+        case 'log':
+          return log;
+        case 'exp':
+          return exp;
+        default:
+          return normalDensity;
+      }
     }
 
     // Riemann integration
@@ -177,10 +144,12 @@
       const b = parseFloat(document.getElementById('b').value);
       const n = parseInt(document.getElementById('n').value);
 
-      const riemann = riemannIntegral(normalDensity, a, b, n);
-      const lebesgue = lebesgueIntegral(normalDensity, a, b, n);
-      const mean = computeMean(normalDensity, a, b, n);
-      const variance = computeVariance(normalDensity, a, b, n, mean);
+      const selectedFunction = getSelectedFunction();
+
+      const riemann = riemannIntegral(selectedFunction, a, b, n);
+      const lebesgue = lebesgueIntegral(selectedFunction, a, b, n);
+      const mean = computeMean(selectedFunction, a, b, n);
+      const variance = computeVariance(selectedFunction, a, b, n, mean);
 
       document.getElementById('riemannResult').textContent = riemann.toFixed(6);
       document.getElementById('lebesgueResult').textContent = lebesgue.toFixed(6);
