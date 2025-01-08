@@ -116,6 +116,8 @@
       <h3>Results</h3>
       <p><strong>Riemann Integral:</strong> <span id="riemannResult">-</span></p>
       <p><strong>Lebesgue Integral:</strong> <span id="lebesgueResult">-</span></p>
+      <p><strong>Mean (Expected Value):</strong> <span id="meanResult">-</span></p>
+      <p><strong>Variance:</strong> <span id="varianceResult">-</span></p>
     </section>
   </main>
 
@@ -147,7 +149,29 @@
       return sum; // Simplified as f(x) * measure(x) = f(x) * delta
     }
 
-    // Compute integrals and update results
+    // Compute mean (expected value) using Riemann integration
+    function computeMean(f, a, b, n) {
+      let delta = (b - a) / n;
+      let sum = 0;
+      for (let i = 0; i < n; i++) {
+        let x = a + i * delta;
+        sum += x * f(x) * delta;
+      }
+      return sum;
+    }
+
+    // Compute variance
+    function computeVariance(f, a, b, n, mean) {
+      let delta = (b - a) / n;
+      let sum = 0;
+      for (let i = 0; i < n; i++) {
+        let x = a + i * delta;
+        sum += Math.pow(x - mean, 2) * f(x) * delta;
+      }
+      return sum;
+    }
+
+    // Compute integrals, mean, and variance, and update results
     function computeIntegrals() {
       const a = parseFloat(document.getElementById('a').value);
       const b = parseFloat(document.getElementById('b').value);
@@ -155,9 +179,13 @@
 
       const riemann = riemannIntegral(normalDensity, a, b, n);
       const lebesgue = lebesgueIntegral(normalDensity, a, b, n);
+      const mean = computeMean(normalDensity, a, b, n);
+      const variance = computeVariance(normalDensity, a, b, n, mean);
 
       document.getElementById('riemannResult').textContent = riemann.toFixed(6);
       document.getElementById('lebesgueResult').textContent = lebesgue.toFixed(6);
+      document.getElementById('meanResult').textContent = mean.toFixed(6);
+      document.getElementById('varianceResult').textContent = variance.toFixed(6);
     }
   </script>
 </body>
