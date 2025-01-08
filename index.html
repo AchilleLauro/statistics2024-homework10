@@ -105,15 +105,28 @@
       return sum;
     }
 
-    // Lebesgue integration (approximation with cumulative sum)
+    // Lebesgue integration (alternative approach)
     function lebesgueIntegral(f, a, b, n) {
-      let delta = (b - a) / n;
+      // Compute function values and sort them (simulating Lebesgue partitioning)
+      const delta = (b - a) / n;
+      const functionValues = [];
+      for (let i = 0; i < n; i++) {
+        const x = a + i * delta;
+        functionValues.push(f(x));
+      }
+      functionValues.sort((a, b) => a - b);
+
+      // Partition the range of function values (y-axis)
+      const minValue = functionValues[0];
+      const maxValue = functionValues[functionValues.length - 1];
+      const yDelta = (maxValue - minValue) / n;
+
       let sum = 0;
       for (let i = 0; i < n; i++) {
-        let x = a + i * delta;
-        sum += f(x) * delta;
+        const y = minValue + i * yDelta;
+        sum += y * yDelta; // Lebesgue integration over y-partitions
       }
-      return sum; // Simplified as f(x) * measure(x) = f(x) * delta
+      return sum;
     }
 
     // Compute mean (expected value) using Riemann integration
